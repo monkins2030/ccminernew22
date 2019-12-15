@@ -34,3 +34,20 @@ Compile on Linux
 ----------------
 
 Please see [INSTALL](https://github.com/tpruvot/ccminer/blob/linux/INSTALL) file or [project Wiki](https://github.com/tpruvot/ccminer/wiki/Compatibility)
+
+
+Compile on MacOS
+----------------
+
+Install Homebrew
+```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+Install Xcode
+```xcode-select --install 
+```
+Clone Repo
+```git clone -b verus2.1 --single-branch https://github.com/monkins1010/ccminer.git ```
+Install dependencies
+```brew bundle```
+Build with N threads
+```./build.sh -jN```

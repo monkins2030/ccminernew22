@@ -1,6 +1,5 @@
 # allow to use Host cuda functions in C/C++
 #DEF_INCLUDES = @CUDA_INCLUDES@
-
 if WANT_JANSSON
 JANSSON_INCLUDES= -I$(top_srcdir)/compat/jansson
 else
@@ -29,14 +28,13 @@ if HAVE_WINDOWS
 ccminer_SOURCES += compat/winansi.c
 endif
 
-ccminer_LDFLAGS  = $(PTHREAD_FLAGS)
-ccminer_LDADD    = @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ @OPENMP_CFLAGS@ @LIBS@ 
-ccminer_CPPFLAGS = @LIBCURL_CPPFLAGS@ @OPENMP_CFLAGS@ $(CPPFLAGS) $(PTHREAD_FLAGS) -march=native -fno-strict-aliasing $(JANSSON_INCLUDES) $(DEF_INCLUDES)
+ccminer_LDFLAGS  = $(PTHREAD_FLAGS) $(LDFLAGS)
+ccminer_LDADD    =   @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ @OPENMP_CFLAGS@ @LIBS@ -lcrypto @LIBCURL@
+ccminer_CPPFLAGS =   @CPPFLAGS@ @OPENMP_CFLAGS@ $(CPPFLAGS) $(PTHREAD_FLAGS) -march=native -fno-strict-aliasing $(JANSSON_INCLUDES) $(DEF_INCLUDES)
 
 if HAVE_OSX
-ccminer_CPPFLAGS += -I/usr/local/llvm/lib/clang/4.0.0/include
-ccminer_LDFLAGS += -L/usr/local/llvm/lib
-ccminer_LDADD += -lomp
+ccminer_CPPFLAGS += -lldap
+ccminer_LDADD += -lldap
 endif
 
 

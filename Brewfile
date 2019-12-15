@@ -1,0 +1,8 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+brew "autoconf"
+brew "pkg-config"
+brew "automake"
+brew "gcc@8"
