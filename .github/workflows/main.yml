@@ -1,0 +1,41 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-ccminer:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: install deps for linux x86-64
+        run: |
+          sudo apt update && sudo apt install -y automake autotools-dev build-essential libcurl4-openssl-dev libssl-dev
+      - name: build ccminer for linux x86-64
+        run: |
+          ./build.sh -j$(nproc)
+          tar -czvf ccminer-CPU-Linux-amd64.tar.gz ccminer
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ccminer
+          path: ccminer-CPU-Linux-amd64.tar.gz
+
+  build-CCminer-macOS:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Compile ccminer for macOS x86-64
+        run: |
+          brew update
+          brew upgrade
+          brew bundle
+          ./build.sh  -j$(sysctl -n hw.physicalcpu)
+          tar -czvf ccminer-CPU-MacOS.tar.gz ccminer
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ccminer
+          path: ccminer-CPU-MacOS.tar.gz
