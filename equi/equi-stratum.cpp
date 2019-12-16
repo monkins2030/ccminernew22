@@ -130,7 +130,7 @@ bool equi_stratum_notify(struct stratum_ctx *sctx, json_t *params)
 	stime = json_string_value(json_array_get(params, p++));				//5
 	nbits = json_string_value(json_array_get(params, p++));				//6
 	clean = json_is_true(json_array_get(params, p++));				//7
-	//VerusCoin v2.1 PBaaS future reserved solution space
+	// TODO, convert hex string to char array for PBaaS support
 	solution = json_string_value(json_array_get(params, p));			//8
 
 	if (!job_id || !prevhash || !coinb1 || !coinb2 || !version || !nbits || !stime ||
@@ -179,9 +179,10 @@ bool equi_stratum_notify(struct stratum_ctx *sctx, json_t *params)
 
 	hex2bin(sctx->job.nbits, nbits, 4);
 	hex2bin(sctx->job.ntime, stime, 4);
-	if(solution)
-	sctx->job.nreward[0] = solution[0]; //just copy the version
-	else sctx->job.nreward[0] = 0;
+
+	// TODO, parse solution hex into nreward for future PBaaS merged mining support
+	if(solution) sctx->job.nreward[0] = 3; //verushash v2.1
+	else sctx->job.nreward[0] = 1;         // verushash v2
 
 	sctx->job.clean = clean;
 
