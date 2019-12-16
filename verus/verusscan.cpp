@@ -219,7 +219,7 @@ extern "C" int scanhash_verus(int thr_id, struct work *work, uint32_t max_nonce,
 		if (vhash[7] <= Htarg)
 		{
 			if (work_restart[thr_id].restart>0)
-				break;
+				goto out;
 			
 			*((uint32_t *)full_data + 368) = nonce_buf;
 			work->valid_nonces++;
@@ -236,13 +236,12 @@ extern "C" int scanhash_verus(int thr_id, struct work *work, uint32_t max_nonce,
 
 		//}
 		if ((uint64_t)throughput + (uint64_t)nonce_buf >= (uint64_t)max_nonce) {
-
-			break;
+			goto out;
 		}
 		nonce_buf += throughput;
 		
 		if (work_restart[thr_id].restart>0)
-			break;
+			goto out;
 
 	} while (!work_restart[thr_id].restart);
 
