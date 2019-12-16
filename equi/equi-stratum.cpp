@@ -122,15 +122,16 @@ bool equi_stratum_notify(struct stratum_ctx *sctx, json_t *params)
 	size_t coinb1_size, coinb2_size;
 	bool clean, ret = false;
 	int ntime, i, p=0;
-	job_id = json_string_value(json_array_get(params, p++));
-	version = json_string_value(json_array_get(params, p++));
-	prevhash = json_string_value(json_array_get(params, p++));
-	coinb1 = json_string_value(json_array_get(params, p++)); //merkle
-	coinb2 = json_string_value(json_array_get(params, p++)); //blank (reserved)
-	stime = json_string_value(json_array_get(params, p++));
-	nbits = json_string_value(json_array_get(params, p++)); p++;
-	solution = json_string_value(json_array_get(params, p++));
-	clean = json_is_true(json_array_get(params, p)); p++;
+	job_id = json_string_value(json_array_get(params, p++));			//0
+	version = json_string_value(json_array_get(params, p++));			//1
+	prevhash = json_string_value(json_array_get(params, p++));			//2
+	coinb1 = json_string_value(json_array_get(params, p++)); //merkle		//3
+	coinb2 = json_string_value(json_array_get(params, p++)); //blank (reserved)	//4
+	stime = json_string_value(json_array_get(params, p++));				//5
+	nbits = json_string_value(json_array_get(params, p++));				//6
+	clean = json_is_true(json_array_get(params, p++));				//7
+	//VerusCoin v2.1 PBaaS future reserved solution space
+	solution = json_string_value(json_array_get(params, p));			//8
 
 	if (!job_id || !prevhash || !coinb1 || !coinb2 || !version || !nbits || !stime ||
 	    strlen(prevhash) != 64 || strlen(version) != 8 ||
