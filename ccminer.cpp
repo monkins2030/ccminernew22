@@ -2311,6 +2311,12 @@ static void *miner_thread(void *userdata)
 		//	gpulog(LOG_WARNING, thr_id, "%s", cudaGetErrorString(err));
 
 		work.valid_nonces = 0;
+		
+		if (abort_flag)
+			break; // time to leave the mining loop...
+
+		if (work_restart[thr_id].restart)
+			continue;
 
 		/* scan nonces for a proof-of-work hash */
 		switch (opt_algo) {
@@ -2325,15 +2331,7 @@ static void *miner_thread(void *userdata)
 			/* should never happen */
 			goto out;
 		}
-
 		
-
-		if (abort_flag)
-			break; // time to leave the mining loop...
-
-		if (work_restart[thr_id].restart)
-			continue;
-
 		/* record scanhash elapsed time */
 		gettimeofday(&tv_end, NULL);
 
