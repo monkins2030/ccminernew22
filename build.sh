@@ -47,8 +47,7 @@ rm -f config.status
 HOST="${HOST}" BUILD="${BUILD}" "${MAKE}" "$@" -C ./depends/ V=1
 ./autogen.sh || echo done
 
-# CFLAGS="-O2" ./configure
 extracflags="-march=native -D_REENTRANT -falign-functions=16 -falign-jumps=16 -falign-labels=16"
-CONFIG_SITE="${PWD}/depends/${HOST}/share/config.site" ./configure
+CONFIG_SITE="${PWD}/depends/${HOST}/share/config.site" ./configure CXXFLAGS="-O2 $extracflags"
 
 "$MAKE" "$@" V=1
