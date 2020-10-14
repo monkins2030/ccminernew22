@@ -9,7 +9,7 @@
 #include "miner.h"
 #include "algos.h"
 
-#if defined(__APPLE__) || (defined(__ANDROID__) && (__ANDROID_API__ > 23))
+#if defined(__APPLE__) || (defined(__ANDROID__) && (__ANDROID_API__ < 24))
 #include "compat/pthreads/pthread_barrier.hpp"
 #endif
 
