@@ -29,9 +29,11 @@ Run the following command, to set-up _Its-Pointless Termux Repo_:
 
 `curl -s https://its-pointless.github.io/setup-pointless-repo.sh | bash`
 
-Then we need to install gcc-6 package:
+Then we need to install `gcc-6` (or `gcc-7`, `gcc-8`, `gcc-9`, `gcc-10`) package:
 
 `pkg install gcc-6`
+
+(or `pkg install gcc-7`, `pkg install gcc-8`, `pkg install gcc-9`, `pkg install gcc-10`, it depends on the Android version you are running)
 
 # Step 4 - Build
 
@@ -46,6 +48,8 @@ Then change the current directory:
 To build `ccminer` from sources we need to switch the default `clang` compiler to the `gcc` we installed on step 3 by executing following commands:
 
 `setupgcc-6`
+
+(or `setupgcc-7`, `setupgcc-8`, `setupgcc-9`, `setupgcc-10`)
 
 and then (to make `configure` process happy)
 
