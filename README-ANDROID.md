@@ -9,12 +9,12 @@ There are two methods (or more?), to compile `ccminer` on Android:
 
 This document explains the second way.
 
-# Step 1 - Install Termux
+# Step 1 - Install the Termux
 
 Download and install the [Termux](https://play.google.com/store/apps/details?id=com.termux) application.
 Open the Termux after install. Next steps we need to do inside it.
 
-# Step 2 - Install dependency packages
+# Step 2 - Install the dependency packages
 
 Run following command, to install the development dependencies:
 
@@ -55,4 +55,4 @@ Then start the build:
 
 `./build.sh`
 
-After successful build you can run builded `ccminer` binary file to start the mining
+After successful build you can run built `ccminer` binary file to start the mining
