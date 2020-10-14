@@ -43,9 +43,13 @@ Then change the current directory:
 
 `cd ccminer`
 
-To build `ccminer` from sources we need to switch the default `clang` compiler to the `gcc` we installed on step 3 by executing following command:
+To build `ccminer` from sources we need to switch the default `clang` compiler to the `gcc` we installed on step 3 by executing following commands:
 
 `setupgcc-6`
+
+and then (to make `configure` process happy)
+
+`setup-patchforgcc`
 
 Then start the build:
 
