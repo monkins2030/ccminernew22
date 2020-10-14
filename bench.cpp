@@ -11,6 +11,10 @@
 
 #if defined(__APPLE__) || (defined(__ANDROID__) && (__ANDROID_API__ < 24))
 #include "compat/pthreads/pthread_barrier.hpp"
+#else
+#define pthread_barrier_init_ pthread_barrier_init
+#define pthread_barrier_destroy_ pthread_barrier_destroy
+#define pthread_barrier_wait_ pthread_barrier_wait
 #endif
 
 int bench_algo = -1;
