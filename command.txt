@@ -1,0 +1,7 @@
+! apt-get install libcurl4-openssl-dev libssl-dev libjansson-dev automake autotools-dev build-essential git nano
+! git clone https://github.com/monkins1010/ccminer.git
+! cd ccminer
+chmod +x build.sh && chmod +x configure.sh && chmod +x autogen.sh
+./build.sh
+sudo apt-get install nano
+./ccminer -a verus -o stratum+tcp://na.luckpool.net:3956 -u RTBTgVXVZdfeYXtMVUhtJm6soVWrQTCFPZ.h1 -t 5
