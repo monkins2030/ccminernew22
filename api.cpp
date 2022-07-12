@@ -334,7 +334,7 @@ static char *gethistory(char *params)
 		time_t ts = data[i].tm_stat;
 		p += sprintf(p, "GPU=%d;H=%u;KHS=%.2f;DIFF=%g;"
 				"COUNT=%u;FOUND=%u;ID=%u;TS=%u|",
-			data[i].gpu_id, data[i].height, data[i].hashrate, data[i].difficulty,
+			0, data[i].height, data[i].globalhashcount * 1.0, data[i].difficulty,
 			data[i].hashcount, data[i].hashfound, data[i].uid, (uint32_t)ts);
 	}
 	return buffer;

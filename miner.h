@@ -348,6 +348,7 @@ struct stats_data {
 	uint8_t npool;
 	uint8_t pool_type;
 	uint16_t align;
+	uint32_t globalhashcount;
 };
 
 struct hashlog_data {

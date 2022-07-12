@@ -1,3 +1,4 @@
+here my htm file 
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -18,7 +19,7 @@ function drawChart(ip) {
 			type: 'spline'
 		},
 		title: {
-			text: 'ccMiner WebSocket Sample - ' + ip,
+			text: 'Worker Stats - ' + ip,
 			x: -20 //center
 		},
 		subtitle: {
@@ -50,12 +51,8 @@ function drawChart(ip) {
 		},
 		series: [
 			{
-				name: 'GPU0',
+				name: 'CPU',
 				data: hashrates[0]
-			},
-			{
-				name: 'GPU1',
-				data: hashrates[1]
 			}
 		]
 	});
@@ -121,8 +118,8 @@ function getData(ip, port) {
 }
 
 $(function () {
-	//getData('192.168.0.110', 4068);
-	getData('localhost', 4068);
+	getData('192.168.1.160', 4068);
+	getData('127.0.0.1', 4068);
 });
 
 </script>
