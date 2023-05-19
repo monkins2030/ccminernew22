@@ -255,7 +255,7 @@ bool equi_stratum_submit(struct pool_infos *pool, struct work *work)
 	cbin2hex(solhex, (const char*) work->extra, 1347);
 
     char* solHexRestore = (char*) calloc(128, 1);
-	cbin2hex(solHexRestore, (const char*)&work->solution[8], 64);
+    cbin2hex(solHexRestore, (const char*)&work->solution[8], 64);
     memcpy(&solhex[6+16], solHexRestore, 128);
 
 
@@ -267,6 +267,7 @@ bool equi_stratum_submit(struct pool_infos *pool, struct work *work)
 		pool->user, jobid, timehex, noncestr, solhex,
 		stratum.job.shares_count + 10);
 
+	free(solHexRestore);
 	free(solhex);
 	free(noncestr);
 

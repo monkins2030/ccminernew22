@@ -180,7 +180,7 @@ extern "C" int scanhash_verus(int thr_id, struct work *work, uint32_t max_nonce,
 	memcpy(sol_data + 3, work->solution, 1344);
 	int version = work->solution[0];
 
-	if (version >= 7) {
+    if (version >= 7) {
         // clear non-canonical data from header/solution before hashing; required for merged mining
         memset(full_data + 4, 0, 96);                        // hashPrevBlock, hashMerkleRoot, hashFinalSaplingRoot
         memset(full_data + 4 + 32 + 32 + 32 + 4, 0, 4);      // nBits
