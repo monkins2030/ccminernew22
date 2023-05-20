@@ -1970,7 +1970,7 @@ static void *miner_thread(void *userdata)
 			nonceptr[0]++; //??
 
 		if (opt_algo == ALGO_EQUIHASH) {
-			nonceptr[1]++;
+			nonceptr[1] = (rand()*4);
 			nonceptr[2] |= thr_id;  //try  was nonceptr[1] |= thr_id << 24 monkins edit
 			//applog_hex(&work.data[27], 32);
 		} 
@@ -3459,13 +3459,14 @@ int main(int argc, char *argv[])
 	parse_single_opt('q', argc, argv);
 	
 	Clear();
-		
-	printf("*** ccminer CPU" PACKAGE_VERSION " for Verushash v2.2 by Monkins1010 based on ccminer***\n\n");
+	printf("*************************************************************\n");	
+	printf("*  ccminer CPU: " PACKAGE_VERSION " for Verushash v2.2 based on ccminer   *\n");
+	printf("*************************************************************\n");	
 
-		//printf("    Built with VC++ %d" , msver());
 		printf("Originally based on Christian Buchner and Christian H. project\n");
-
-		printf("Located at: " PACKAGE_URL " \n\n");
+		printf("Adapted to Verus by Monkins1010\n");
+	    printf("Goto https://wiki.verus.io/#!index.md for mining setup guides. \n");
+		printf("Git repo located at: " PACKAGE_URL " \n\n");
 	
 
 	rpc_user = strdup("");
