@@ -176,7 +176,7 @@ extern "C" int scanhash_verus(int thr_id, struct work *work, uint32_t max_nonce,
 	struct timeval tv_start, tv_end, diff;
 	double secs, solps;
 
-	__m128i data_key =  (__m128i*)malloc(VERUS_KEY_SIZE + 1024);
+	__m128i *data_key =  (__m128i *)malloc(VERUS_KEY_SIZE + 1024);
 	__m128i *data_key_prand = data_key + VERUS_KEY_SIZE128 ;
 	__m128i *data_key_prandex = data_key + VERUS_KEY_SIZE128 + 32;
 	__m128i data_key_master[VERUS_KEY_SIZE128] = { 0 };
