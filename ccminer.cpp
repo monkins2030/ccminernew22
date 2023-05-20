@@ -1987,7 +1987,7 @@ static void *miner_thread(void *userdata)
 			wcmplen -= 4;
 		}
 
-		if (opt_algo == ALGO_CRYPTONIGHT || opt_algo == ALGO_CRYPTOLIGHT) {
+		if (opt_algo == ALGO_CRYPTONIGHT || opt_algo == ALGO_CRYPTOLIGHT || opt_algo == ALGO_EQUIHASH) {
 			uint32_t oldpos = nonceptr[0];
 			bool nicehash = strstr(pools[cur_pooln].url, "nicehash") != NULL;
 			if (memcmp(&work.data[wcmpoft], &g_work.data[wcmpoft], wcmplen)) {
@@ -1995,6 +1995,8 @@ static void *miner_thread(void *userdata)
 				if (!nicehash) nonceptr[0] = (rand()*4) << 24;
 				nonceptr[0] &=  0xFF000000u; // nicehash prefix hack
 				nonceptr[0] |= (0x00FFFFFFu / opt_n_threads) * thr_id;
+				// force xnsub when mining using nicehash stratum
+				opt_extranonce = true;
 			}
 			// also check the end, nonce in the middle
 			else if (memcmp(&work.data[44/4], &g_work.data[0], 76-44)) {
