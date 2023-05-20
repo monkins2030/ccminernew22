@@ -669,17 +669,17 @@ __m128i __verusclmulwithoutreduction64alignedrepeat_port2_2(__m128i *randomsourc
 		__m128i *prand = randomsource + ((selector >> 5) & keyMask);
 		__m128i *prandex = randomsource + ((selector >> 32) & keyMask);
 
-		_mm_store_si128_emu(&g_prand[i], prand[0]);
-		_mm_store_si128_emu(&g_prandex[i], prandex[0]);
-   		fixrand[i] = prand_idx;
-		fixrandex[i] = prandex_idx;
 
 
 		// select random start and order of pbuf processing
 		pbuf = pbuf_copy + (selector & 3);
-	uint32_t prand_idx = (selector >> 5) & keyMask;
-	uint32_t prandex_idx = (selector >>32) & keyMask;
+		uint32_t prand_idx = (selector >> 5) & keyMask;
+		uint32_t prandex_idx = (selector >>32) & keyMask;
   
+		_mm_store_si128_emu(&g_prand[i], prand[0]);
+		_mm_store_si128_emu(&g_prandex[i], prandex[0]);
+   		fixrand[i] = prand_idx;
+		fixrandex[i] = prandex_idx;
 
 
 		switch (selector & 0x1c)
