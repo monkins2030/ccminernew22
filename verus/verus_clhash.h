@@ -18,4 +18,5 @@
  **/
 
 uint64_t verusclhash_port2_1(void * random, const unsigned char buf[64], uint64_t keyMask, uint32_t *  __restrict fixrand, uint32_t * __restrict fixrandex);
-uint64_t verusclhash_port2_2(void * random, const unsigned char buf[64], uint64_t keyMask, uint32_t *  __restrict fixrand, uint32_t * __restrict fixrandex);
+uint64_t verusclhash_port2_2(void * random, const unsigned char buf[64], uint64_t keyMask, uint32_t *  __restrict fixrand, uint32_t * __restrict fixrandex,
+                                __m128i *g_prand, __m128i *g_prandex);

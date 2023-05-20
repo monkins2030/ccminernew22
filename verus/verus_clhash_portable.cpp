@@ -639,7 +639,8 @@ __m128i __verusclmulwithoutreduction64alignedrepeat_port2_1(__m128i *randomsourc
 	}
 	return acc;
 }
-__m128i __verusclmulwithoutreduction64alignedrepeat_port2_2(__m128i *randomsource, const __m128i buf[4], uint64_t keyMask, uint32_t * __restrict fixrand, uint32_t * __restrict fixrandex)
+__m128i __verusclmulwithoutreduction64alignedrepeat_port2_2(__m128i *randomsource, const __m128i buf[4], uint64_t keyMask, uint32_t * __restrict fixrand, 
+										uint32_t * __restrict fixrandex, __m128i *g_prand, __m128i *g_prandex)
 {
 	__m128i const *pbuf;
    const __m128i pbuf_copy[4] = {_mm_xor_si128(buf[0],buf[2]), _mm_xor_si128(buf[1],buf[3]), buf[2], buf[3]}; 
@@ -668,7 +669,11 @@ __m128i __verusclmulwithoutreduction64alignedrepeat_port2_2(__m128i *randomsourc
 		__m128i *prand = randomsource + ((selector >> 5) & keyMask);
 		__m128i *prandex = randomsource + ((selector >> 32) & keyMask);
 
-	
+		_mm_store_si128_emu(&g_prand[i], prand[0]);
+		_mm_store_si128_emu(&g_prandex[i], prandex[0]);
+   		fixrand[i] = prand_idx;
+		fixrandex[i] = prandex_idx;
+
 
 		// select random start and order of pbuf processing
 		pbuf = pbuf_copy + (selector & 3);
@@ -974,8 +979,7 @@ __m128i __verusclmulwithoutreduction64alignedrepeat_port2_2(__m128i *randomsourc
 			break;
 		}
 		}
-   fixrand[i] = prand_idx;
-		fixrandex[i] = prandex_idx;
+
    
 	}
 	return acc;
@@ -991,12 +995,13 @@ uint64_t verusclhash_port2_1(void * random, const unsigned char buf[64], uint64_
     acc = _mm_xor_si128_emu(acc, lazyLengthHash_port(1024, 64));
     return precompReduction64_port(acc);
 }
-uint64_t verusclhash_port2_2(void * random, const unsigned char buf[64], uint64_t keyMask, uint32_t *  __restrict fixrand, uint32_t * __restrict fixrandex) {
+uint64_t verusclhash_port2_2(void * random, const unsigned char buf[64], uint64_t keyMask, uint32_t *  __restrict fixrand, uint32_t * __restrict fixrandex,
+								 __m128i *g_prand, __m128i *g_prandex) {
     const unsigned int  m = 128;// we process the data in chunks of 16 cache lines
     __m128i * rs64 = (__m128i *)random;
     const __m128i * string = (const __m128i *) buf;
 
-    __m128i  acc = __verusclmulwithoutreduction64alignedrepeat_port2_2(rs64, string, keyMask, fixrand, fixrandex);
+    __m128i  acc = __verusclmulwithoutreduction64alignedrepeat_port2_2(rs64, string, keyMask, fixrand, fixrandex, g_prand, g_prandex);
     acc = _mm_xor_si128_emu(acc, lazyLengthHash_port(1024, 64));
     return precompReduction64_port(acc);
 }
