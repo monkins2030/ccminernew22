@@ -178,7 +178,7 @@ extern "C" int scanhash_verus(int thr_id, struct work *work, uint32_t max_nonce,
 	memcpy(full_data, pdata, 140);
 	memcpy(sol_data, block_41970, 3);
 	memcpy(sol_data + 3, work->solution, 1344);
-	int version = work->solution[0];
+	uint8_t version = work->solution[0];
 
 	if (version >= 7) {
 
@@ -198,7 +198,7 @@ extern "C" int scanhash_verus(int thr_id, struct work *work, uint32_t max_nonce,
 	do {
 
 		*hashes_done = nonce_buf + throughput;
-Verus2hash((unsigned char *)vhash, (unsigned char *)blockhash_half, nonce_buf, data_key, 
+		Verus2hash((unsigned char *)vhash, (unsigned char *)blockhash_half, nonce_buf, data_key, 
 				&gpuinit, fixrand, fixrandex , data_key_prand, data_key_prandex, version);
 
 		if (vhash[7] <= Htarg )
@@ -216,7 +216,6 @@ Verus2hash((unsigned char *)vhash, (unsigned char *)blockhash_half, nonce_buf, d
 			goto out;
 		}
 
-		//}
 		if ((uint64_t)throughput + (uint64_t)nonce_buf >= (uint64_t)max_nonce) {
 
 			break;
@@ -228,13 +227,11 @@ Verus2hash((unsigned char *)vhash, (unsigned char *)blockhash_half, nonce_buf, d
 
 out:
 	gettimeofday(&tv_end, NULL);
-	//timeval_subtract(&diff, &tv_end, &tv_start);
-	//secs = (1.0 * diff.tv_sec) + (0.000001 * diff.tv_usec);
-	//solps = (double)nonce_buf / secs;
+
 
 	pdata[NONCE_OFT] = ((uint32_t*)full_data)[NONCE_OFT] + 1;
 	free(data_key);
-	//free(data_key_master);
+
 	return work->valid_nonces;
 }
 
