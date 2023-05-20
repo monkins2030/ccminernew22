@@ -1621,7 +1621,7 @@ static bool stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 	} else if (opt_algo == ALGO_EQUIHASH) {
 		memcpy(&work->data[9], sctx->job.coinbase, 32+32); // merkle [9..16] + reserved
 		work->data[25] = le32dec(sctx->job.ntime);
-		work->hash_ver = sctx->job.hash_ver;
+		memcpy(&work->solution, sctx->job.solution,1344);
 		work->data[26] = le32dec(sctx->job.nbits);
 		memcpy(&work->data[27], sctx->xnonce1, sctx->xnonce1_size & 0x1F); // pool extranonce
 		work->data[35] = 0x80;
