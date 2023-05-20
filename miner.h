@@ -554,7 +554,7 @@ struct stratum_job {
 	uint32_t height;
 	uint32_t shares_count;
 	double diff;
-	int hash_ver;
+	unsigned char solution[1344];
 };
 
 struct stratum_ctx {
@@ -628,7 +628,7 @@ struct work {
 	struct tx txs[POK_MAX_TXS];
 	// zec solution
 	uint8_t extra[1388];
-	int hash_ver;
+	unsigned char solution[1344];
 };
 
 #define POK_BOOL_MASK 0x00008000

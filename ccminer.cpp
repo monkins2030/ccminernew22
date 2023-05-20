@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2010 Jeff Garzik
  * Copyright 2012-2014 pooler
  * Copyright 2014-2017 tpruvot
@@ -2041,7 +2041,7 @@ static void *miner_thread(void *userdata)
 			nonceptr[2] |= thr_id;
 
 		} else if (opt_algo == ALGO_EQUIHASH) {
-			nonceptr[1]++;
+			nonceptr[1] = (rand()*4);
 			nonceptr[2] |= thr_id;  //try  was nonceptr[1] |= thr_id << 24
 			//applog_hex(&work.data[27], 32);
 		} else if (opt_algo == ALGO_WILDKECCAK) {
@@ -3668,30 +3668,14 @@ int main(int argc, char *argv[])
 	// get opt_quiet early
 	parse_single_opt('q', argc, argv);
 
-	printf("      ..              ..\n");
-	printf("   .lkK0o.          'd0Kkc.  \n");
-	printf("  cKWMMMW0;       'dXMMMMWK:     \n");
-	printf(" :XMMMMMMMXc.    lKMMMMMMMMK;                                                          .\n");
-	printf(" lWMMMMMMMMNl., OWMMMMMMMMMNkoxkO0OOko:.   'odddddl,;okOOdodddddc.     ,oddddo'  ., ldkO00Okxo : .\n");
-	printf("  ,0MMMMMMMMMNxdXMMMMMMMMMMNNWMMMMMMMMMWK: .xWMMMMMWXWMMMNKNMMMMWd.   .kMMMMM0,'oKWMMMMMMMMMMWKc\n");
-	printf("   ;KMMMMMMMMMMMMMMMMMMMMWWWMMMN0kOXMMMMMK; :XMMMMMMMMMMMWKKWMMMMK,   cNMMMMWdlKMMMMXxlcdXMMMMM0'\n");
-	printf("    :KMMMMMMMMMMMMMMMMMWWWWMMNd'.  :XMMMMNdkWMMMMWN0oc:::dXMMMMWd.   .kMMMMM0o0MMMMWx.   :xxxxxl.   \n");
-	printf("     :KMMMMMMMMMMMMMMMWWWMMMMKdllllxNMMMMN0XMMMMWx,     ..xMMMMMK,   cNMMMMWo; 0MMMMMNKkdl:, .\n");
-	printf("      :KMMMMMMMMMMMMNXNWMMMMMMMMMMMMMMMMMXXWMMMMK,      :XMMMMWo    .kMMMMM0' ;ONWMMMMMMMMN0o.   \n");
-	printf("       ;KMMMMMMMMMW0coNMMMMMKkxxxxxxxxxxxONMMMMWo      .xMMMMM0,    cNMMMMWl    ':oxOKWMMMMMWk.     \n");
-	printf("        ;0MMMMMMMNd.lWMMMMMO,     .'cc. .kWMMMM0,      ;KMMMMMk.   ;0MMMMMXkddddd;   .cKMMMMMk.  \n");
-	printf("         ,0WMMMWO;, 0MMMMMWXkxdx0NWWx' :XMMMMWo        :NMMMMMNOxxONMMMMMNkOMMMMMKo::ckNMMMMK;   \n");
-	printf("          'OWMXl.     ,OWMMMMMMMMMMMWKo:kWMMMMK,       ,0MMMMMMMMWWWMMMMM0,'kWMMMMMMMMMMMWKd' \n");
-	printf("           .dd'        .;oxOKXXK0kdl,. 'x0000Oc         .oOKXXKOxc:x0000O:  .; okOKXXK0Oxl, .\n");
-//	printf("                            ....                           ....                  .....\n");
-//	printf("*********************************************************************************************************\n");
+	printf("*************************************************************\n");	
+	printf("*  ccminer CPU: " PACKAGE_VERSION " for Verushash v2.2 based on ccminer   *\n");
+	printf("*************************************************************\n");	
 
-	printf("\n      *** ccminer CPU" PACKAGE_VERSION " for Verushash v2.1 - 2.2  by Monkins1010 based on ccminer***\n\n");
-
-		//printf("    Built with VC++ %d" , msver());
 		printf("Originally based on Christian Buchner and Christian H. project\n");
-
-		printf("Located at: " PACKAGE_URL " \n\n");
+		printf("Adapted to Verus by Monkins1010\n");
+	    printf("Goto https://wiki.verus.io/#!index.md for mining setup guides. \n");
+		printf("Git repo located at: " PACKAGE_URL " \n\n");
 
 	rpc_user = strdup("");
 	rpc_pass = strdup("");
