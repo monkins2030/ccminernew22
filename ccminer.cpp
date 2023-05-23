@@ -1630,7 +1630,7 @@ static bool stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 	}
 	else if (opt_algo == ALGO_EQUIHASH) {
 		memcpy(&work->data[9], sctx->job.coinbase, 32 + 32); // merkle [9..16] + reserved
-		work->hash_ver = sctx->job.hash_ver;
+		memcpy(&work->solution, sctx->job.solution, 1344);
 		work->data[25] = le32dec(sctx->job.ntime);
 		work->data[26] = le32dec(sctx->job.nbits);
 		memcpy(&work->data[27], sctx->xnonce1, sctx->xnonce1_size & 0x1F); // pool extranonce
@@ -2065,7 +2065,7 @@ static void *miner_thread(void *userdata)
 
 		}
 		else if (opt_algo == ALGO_EQUIHASH) {
-			nonceptr[1]++;
+			nonceptr[1] = (rand() * 4);
 			//nonceptr[1] |= thr_id << 24;
 			nonceptr[2] |= thr_id;
 			//applog_hex(&work.data[27], 32);
@@ -3708,31 +3708,10 @@ int main(int argc, char *argv[])
 	// get opt_quiet early
 	parse_single_opt('q', argc, argv);
 
-	printf("      ..              ..\n");
-	printf("   .lkK0o.          'd0Kkc.  \n");
-	printf("  cKWMMMW0;       'dXMMMMWK:     \n");
-	printf(" :XMMMMMMMXc.    lKMMMMMMMMK;                                                          .\n");
-	printf(" lWMMMMMMMMNl., OWMMMMMMMMMNkoxkO0OOko:.   'odddddl,;okOOdodddddc.     ,oddddo'  ., ldkO00Okxo : .\n");
-	printf("  ,0MMMMMMMMMNxdXMMMMMMMMMMNNWMMMMMMMMMWK: .xWMMMMMWXWMMMNKNMMMMWd.   .kMMMMM0,'oKWMMMMMMMMMMWKc\n");
-	printf("   ;KMMMMMMMMMMMMMMMMMMMMWWWMMMN0kOXMMMMMK; :XMMMMMMMMMMMWKKWMMMMK,   cNMMMMWdlKMMMMXxlcdXMMMMM0'\n");
-	printf("    :KMMMMMMMMMMMMMMMMMWWWWMMNd'.  :XMMMMNdkWMMMMWN0oc:::dXMMMMWd.   .kMMMMM0o0MMMMWx.   :xxxxxl.   \n");
-	printf("     :KMMMMMMMMMMMMMMMWWWMMMMKdllllxNMMMMN0XMMMMWx,     ..xMMMMMK,   cNMMMMWo; 0MMMMMNKkdl:, .\n");
-	printf("      :KMMMMMMMMMMMMNXNWMMMMMMMMMMMMMMMMMXXWMMMMK,      :XMMMMWo    .kMMMMM0' ;ONWMMMMMMMMN0o.   \n");
-	printf("       ;KMMMMMMMMMW0coNMMMMMKkxxxxxxxxxxxONMMMMWo      .xMMMMM0,    cNMMMMWl    ':oxOKWMMMMMWk.     \n");
-	printf("        ;0MMMMMMMNd.lWMMMMMO,     .'cc. .kWMMMM0,      ;KMMMMMk.   ;0MMMMMXkddddd;   .cKMMMMMk.  \n");
-	printf("         ,0WMMMWO;, 0MMMMMWXkxdx0NWWx' :XMMMMWo        :NMMMMMNOxxONMMMMMNkOMMMMMKo::ckNMMMMK;   \n");
-	printf("          'OWMXl.     ,OWMMMMMMMMMMMWKo:kWMMMMK,       ,0MMMMMMMMWWWMMMMM0,'kWMMMMMMMMMMMWKd' \n");
-	printf("           .dd'        .;oxOKXXK0kdl,. 'x0000Oc         .oOKXXKOxc:x0000O:  .; okOKXXK0Oxl, .\n");
-	
-	printf("\n*** ccminer3.8 for GPU's by Monkins1010 based on ccminer***\n");
-	if (!opt_quiet) {
-		const char* arch = is_x64() ? "64-bits" : "32-bits";
-
-		printf("Verushash 2.1 - 2.2 GPU miner\n\n");
-		printf("Originally based on Christian Buchner and Christian H. project\n");
-		printf("BTC donation address: 1AJdfCpLWPNoAMDfHF1wD5y8VgKSSTHxPo (tpruvot)\n\n");
-	
-	}
+	printf("\n*** ccminer 3.8.3 for GPU's by Monkins1010 based on ccminer***\n");
+	printf("Verushash 2.1 - 2.2 GPU miner\n\n");
+	printf("Originally based on Christian Buchner and Christian H. project\n");
+	printf("BTC donation address: 1AJdfCpLWPNoAMDfHF1wD5y8VgKSSTHxPo (tpruvot)\n\n");
 
 	rpc_user = strdup("");
 	rpc_pass = strdup("");

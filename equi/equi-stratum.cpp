@@ -118,7 +118,7 @@ bool equi_stratum_set_target(struct stratum_ctx *sctx, json_t *params)
 
 bool equi_stratum_notify(struct stratum_ctx *sctx, json_t *params)
 {
-	const char *job_id, *version, *prevhash, *coinb1, *coinb2, *nbits, *stime, *hash_version = NULL;
+	const char *job_id, *version, *prevhash, *coinb1, *coinb2, *nbits, *stime, *solution = NULL;
 	size_t coinb1_size, coinb2_size;
 	bool clean, ret = false;
 	int ntime, i, p=0;
@@ -130,7 +130,7 @@ bool equi_stratum_notify(struct stratum_ctx *sctx, json_t *params)
 	stime = json_string_value(json_array_get(params, p++));
 	nbits = json_string_value(json_array_get(params, p++));
 	clean = json_is_true(json_array_get(params, p)); p++;
-	hash_version = json_string_value(json_array_get(params, p++));
+	solution = json_string_value(json_array_get(params, p++));
 
 	if (!job_id || !prevhash || !coinb1 || !coinb2 || !version || !nbits || !stime ||
 	    strlen(prevhash) != 64 || strlen(version) != 8 ||
@@ -139,7 +139,7 @@ bool equi_stratum_notify(struct stratum_ctx *sctx, json_t *params)
 		applog(LOG_ERR, "Stratum notify: invalid parameters");
 		goto out;
 	}
-	hex2bin(&sctx->job.hash_ver, hash_version, 1);
+	hex2bin(&sctx->job.solution, solution, 1344);
 	/* store stratum server time diff */
 	hex2bin((uchar *)&ntime, stime, 4);
 	ntime = ntime - (int) time(0);
@@ -254,6 +254,10 @@ bool equi_stratum_submit(struct pool_infos *pool, struct work *work)
 	}
 	cbin2hex(solhex, (const char*) work->extra, 1347);
 
+	char* solHexRestore = (char*)calloc(128, 1);
+	cbin2hex(solHexRestore, (const char*)&work->solution[8], 64);
+	memcpy(&solhex[6 + 16], solHexRestore, 128);
+
 	jobid = work->job_id + 8;
 	sprintf(timehex, "%08x", swab32(work->data[25]));
 
@@ -261,7 +265,8 @@ bool equi_stratum_submit(struct pool_infos *pool, struct work *work)
 		"[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"], \"id\":%u}",
 		pool->user, jobid, timehex, noncestr, solhex,
 		stratum.job.shares_count + 10);
-
+		
+	free(solHexRestore);
 	free(solhex);
 	free(noncestr);
 
