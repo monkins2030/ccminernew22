@@ -2,9 +2,8 @@
 #define SPX_HARAKA_H
 
 //#include "immintrin.h"
-#include "SSE2NEON.h"
+#include "sse2neon.h"
 #include "arm_neon.h"
-typedef int32x4_t __m128i;
 
 #define NUMROUNDS 5
 
