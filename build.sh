@@ -11,6 +11,6 @@ rm -f config.status
 ./autogen.sh || echo done
 
 # CFLAGS="-O2" ./configure
-./configure.sh
+CFLAGS="-O3" ./configure.sh
 
 make
