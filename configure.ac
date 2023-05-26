@@ -1,4 +1,4 @@
-AC_INIT([ccminer_CPU], [3.8.0], [], [ccminer], [http://github.com/monkins1010/ccminer])
+AC_INIT([ccminer_CPU], [3.8.3], [], [ccminer], [http://github.com/monkins1010/ccminer])
 
 AC_PREREQ([2.59c])
 AC_CANONICAL_SYSTEM
@@ -93,8 +93,6 @@ else
 	JANSSON_LIBS=-ljansson
 fi
 
-LIBCURL_CHECK_CONFIG(, 7.15.2, ,
-  [AC_MSG_ERROR([Missing required libcurl >= 7.15.2])])
 
 AC_SUBST(JANSSON_LIBS)
 AC_SUBST(PTHREAD_FLAGS)
@@ -121,41 +119,11 @@ then
   SUFFIX=""
 fi
 
-dnl Setup CUDA paths
-AC_ARG_WITH([cuda],
-   [  --with-cuda=PATH    prefix where cuda is installed [default=/usr/local/cuda]])
 
-AC_ARG_WITH([nvml],
-   [  --with-nvml=PATH    prefix where libnvml is installed [default=/usr/lib]])
 
-AM_CONDITIONAL([HAVE_NVML], [test -n "$with_nvml"])
 
-NVCC="nvcc"
 
-if test -n "$with_cuda" ; then
-  CUDA_INCLUDES="-I$with_cuda/include"
-  CUDA_LIBS="-lcudart"
-  CUDA_LDFLAGS="-L$with_cuda/lib$SUFFIX"
-  if test -x "$with_cuda/bin/nvcc" ; then
-    NVCC="$with_cuda/bin/nvcc"
-  fi
-else
-  CUDA_INCLUDES="-I/usr/local/cuda/include"
-  CUDA_LIBS="-lcudart -static-libstdc++"
-  CUDA_LDFLAGS="-L/usr/local/cuda/lib$SUFFIX"
-fi
 
-if test -n "$with_nvml" ; then
-  NVML_LIBPATH=$with_nvml
-  CUDA_LDFLAGS="$CUDA_LDFLAGS -ldl"
-fi
-AC_SUBST(NVML_LIBPATH)
-
-AC_SUBST(CUDA_CFLAGS)
-AC_SUBST(CUDA_INCLUDES)
-AC_SUBST(CUDA_LIBS)
-AC_SUBST(CUDA_LDFLAGS)
-AC_SUBST(NVCC)
 
 AC_SUBST(OPENMP_CFLAGS) 
 

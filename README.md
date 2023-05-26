@@ -40,3 +40,8 @@ Compile on FreeBSD
 ------------------
 
 Make sure you have `gmake` installed from the ports tree. Use `build-freebsd.sh`
+
+
+Compile on MAC
+brew install autoconf automake libtool openssl
+./build.sh

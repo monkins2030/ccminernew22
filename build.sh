@@ -2,7 +2,11 @@
 
 # Simple script to create the Makefile and build
 
-# export PATH="$PATH:/usr/local/cuda/bin/"
+if [[ $OSTYPE == 'darwin'* ]]; then
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl/include"
+export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
+fi
 
 make distclean || echo clean
 
@@ -13,4 +17,4 @@ rm -f config.status
 # CFLAGS="-O2" ./configure
 ./configure.sh
 
-make -j $(nproc)
+make 
