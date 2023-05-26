@@ -1971,7 +1971,7 @@ static void *miner_thread(void *userdata)
 
 		if (opt_algo == ALGO_EQUIHASH) {
 		    //nonceptr[1] = (rand()*4);
-			nonceptr[2] |= ( thr_id ) + ((rand()*4) << 24);  //try  was nonceptr[1] |= thr_id << 24 monkins edit
+			nonceptr[2] = rand() << 24 | rand() << 8 | thr_id;
 			//applog_hex(&work.data[27], 32);
 		} 
 
