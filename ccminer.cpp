@@ -420,6 +420,7 @@ struct option options[] = {
 	{ "no-longpoll", 0, NULL, 1003 },
 	{ "no-stratum", 0, NULL, 1007 },
 	{ "no-autotune", 0, NULL, 1004 },  // scrypt
+	{ "nicehash", 0, NULL, 1040 },     // nicehash mode
 	{ "interactive", 1, NULL, 1050 },  // scrypt
 	{ "lookup-gap", 1, NULL, 'L' },    // scrypt
 	{ "texture-cache", 1, NULL, 1051 },// scrypt
@@ -3207,6 +3208,9 @@ void parse_arg(int key, char *arg)
 			while (n < MAX_GPUS)
 				device_lookup_gap[n++] = last;
 		}
+		break;
+	case 1040: /* nicehash mode */
+		nicehash = true;
 		break;
 	case 1050: /* scrypt --interactive */
 		{
