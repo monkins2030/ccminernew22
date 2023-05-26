@@ -31,20 +31,14 @@ ccminer_SOURCES += compat/winansi.c
 endif
 
 ccminer_LDFLAGS  = $(PTHREAD_FLAGS)
-if HAVE_OSX
-ccminer_LDADD    = @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ @OPENMP_CFLAGS@ @LIBS@
+
+ccminer_LDADD    = -lcurl @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ @OPENMP_CFLAGS@ @LIBS@
 ccminer_CPPFLAGS = @OPENMP_CFLAGS@ $(CPPFLAGS) $(PTHREAD_FLAGS) -march=native -fno-strict-aliasing $(JANSSON_INCLUDES) $(DEF_INCLUDES) -O3
-else 
-ccminer_LDADD    = @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ @OPENMP_CFLAGS@ @LIBS@
-ccminer_CPPFLAGS = @LIBCURL_CPPFLAGS@ @OPENMP_CFLAGS@ $(CPPFLAGS) $(PTHREAD_FLAGS) -march=native -fno-strict-aliasing $(JANSSON_INCLUDES) $(DEF_INCLUDES) -O3
-endif
 
 
 if HAVE_OSX
 ccminer_CXXFLAGS = -std=c++11
 ccminer_CPPFLAGS += -I/usr/local/llvm/lib/clang/4.0.0/include
-#ccminer_LDFLAGS += -L/usr/local/llvm/lib
-ccminer_LDADD += -lcurl
 endif
 
 
