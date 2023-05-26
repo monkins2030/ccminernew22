@@ -79,6 +79,9 @@ struct workio_cmd {
 	int pooln;
 };
 
+// nicehash mode default to false, need --nicehash option.
+bool nicehash = false;
+
 bool opt_debug = false;
 bool opt_debug_diff = false;
 bool opt_debug_threads = false;
@@ -1995,9 +1998,14 @@ static void *miner_thread(void *userdata)
 				if (!nicehash) nonceptr[0] = (rand()*4) << 24;
 				nonceptr[0] &=  0xFF000000u; // nicehash prefix hack
 				nonceptr[0] |= (0x00FFFFFFu / opt_n_threads) * thr_id;
+			if (nicehash) {
 				// force xnsub when mining using nicehash stratum
 				opt_extranonce = true;
+			} else {
+				// disable xnsub when not using nicehash mode
+				opt_extranonce = false;
 			}
+
 			// also check the end, nonce in the middle
 			else if (memcmp(&work.data[44/4], &g_work.data[0], 76-44)) {
 				memcpy(&work, &g_work, sizeof(struct work));
@@ -3767,8 +3775,8 @@ int main(int argc, char *argv[])
 		allow_mininginfo = false;
 	}
 
-	if (opt_algo == ALGO_EQUIHASH) {
-		opt_extranonce = false; // disable subscribe
+	if (opt_algo == ALGO_EQUIHASH && !nicehash) {
+		opt_extranonce = false; // disable subscribe by default.
 	}
 
 
