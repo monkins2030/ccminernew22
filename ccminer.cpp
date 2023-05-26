@@ -1998,12 +1998,13 @@ static void *miner_thread(void *userdata)
 				if (!nicehash) nonceptr[0] = (rand()*4) << 24;
 				nonceptr[0] &=  0xFF000000u; // nicehash prefix hack
 				nonceptr[0] |= (0x00FFFFFFu / opt_n_threads) * thr_id;
-			if (nicehash) {
-				// force xnsub when mining using nicehash stratum
-				opt_extranonce = true;
-			} else {
-				// disable xnsub when not using nicehash mode
-				opt_extranonce = false;
+				if (nicehash) {
+					// force xnsub when mining using nicehash stratum
+					opt_extranonce = true;
+				} else {
+					// disable xnsub when not using nicehash mode
+					opt_extranonce = false;
+				}
 			}
 
 			// also check the end, nonce in the middle
