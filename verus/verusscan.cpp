@@ -198,12 +198,11 @@ extern "C" int scanhash_verus(int thr_id, struct work *work, uint32_t max_nonce,
 
         // clear non-canonical data from header/solution before hashing; required for merged mining 
 		memset(full_data + 4, 0, 96);                        // hashPrevBlock, hashMerkleRoot, hashFinalSaplingRoot
-        memset(full_data + 4 + 32 + 32 + 32 + 4, 0, 4);      // nBits
-        memset(full_data + 4 + 32 + 32 + 32 + 4 + 4, 0, 32); // nNonce
-        memset(sol_data + 3 + 8, 0, 64);                     // hashPrevMMRRoot, hashBlockMMRRoot
-		memcpy(nonceSpace, &pdata[EQNONCE_OFFSET - 3], 4 );			// transfer the nonce values that would be in the header to
-		memcpy(nonceSpace + 4, &pdata[EQNONCE_OFFSET + 1], 4 );		// the 15 bytes available
-		memcpy(nonceSpace + 8, &pdata[EQNONCE_OFFSET + 2], 1 );	
+        	memset(full_data + 4 + 32 + 32 + 32 + 4, 0, 4);      // nBits
+        	memset(full_data + 4 + 32 + 32 + 32 + 4 + 4, 0, 32); // nNonce
+        	memset(sol_data + 3 + 8, 0, 64);                     // hashPrevMMRRoot, hashBlockMMRRoot
+		memcpy(nonceSpace, &pdata[EQNONCE_OFFSET - 3], 7 );		
+		memcpy(nonceSpace + 7, &pdata[EQNONCE_OFFSET + 2], 4 );
 	}
 
 	uint32_t  vhash[8] = { 0 };
