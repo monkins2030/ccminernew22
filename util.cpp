@@ -1844,6 +1844,7 @@ bool stratum_handle_method(struct stratum_ctx *sctx, const char *s)
 
 	if (!strcasecmp(method, "mining.notify")) {
 		ret = stratum_notify(sctx, params);
+		restart_threads();
 		goto out;
 	}
 	if (!strcasecmp(method, "mining.ping")) { // cgminer 4.7.1+
