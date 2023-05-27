@@ -1182,7 +1182,7 @@ static bool stratum_parse_extranonce(struct stratum_ctx *sctx, json_t *params, i
 		if (strcmp(algo, "verus") == 0) {
 			int xn1_size = (int)strlen(xnonce1) / 2;
 			xn2_size = 32 - xn1_size;
-			if (xn1_size < 4 || xn1_size > 12) {
+			if (xn1_size < 3 || xn1_size > 12) {
 				// This miner iterates the nonces at data32[30]
 				applog(LOG_ERR, "Unsupported extranonce size of %d (12 maxi)", xn1_size);
 				goto out;
