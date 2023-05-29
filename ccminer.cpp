@@ -1975,7 +1975,7 @@ static void *miner_thread(void *userdata)
 					opt_extranonce = false;
 				}
 			}
-			// also check the end, nonce in the middle\
+			// also check the end, nonce in the middle.
 			else if (memcmp(&work.data[44/4], &g_work.data[0], 76-44)) {
 				memcpy(&work, &g_work, sizeof(struct work));
 			}
