@@ -315,7 +315,7 @@ struct cgpu_info {
 	uint32_t rejected;
 	double khashes;
 	int has_monitoring;
-	
+
 
 	char gpu_sn[64];
 	char gpu_desc[64] = "cpu";
@@ -411,6 +411,7 @@ extern bool want_longpoll;
 extern bool have_longpoll;
 extern bool want_stratum;
 extern bool have_stratum;
+extern bool opt_redirect;
 extern bool opt_stratum_stats;
 extern char *opt_cert;
 extern char *opt_proxy;

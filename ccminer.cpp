@@ -93,6 +93,7 @@ bool want_longpoll = false;
 bool have_longpoll = false;
 bool want_stratum = true;
 bool have_stratum = false;
+bool opt_redirect = true;
 bool allow_gbt = true;
 bool allow_mininginfo = true;
 bool check_dups = false; //false;
@@ -336,6 +337,7 @@ Options:\n\
       --no-gbt          disable getblocktemplate support (height check in solo)\n\
       --no-longpoll     disable X-Long-Polling support\n\
       --no-stratum      disable X-Stratum support\n\
+      --no-redirect     ignore requests to change the URL of the mining server\n\
       --no-extranonce   disable extranonce subscribe on stratum\n\
   -q, --quiet           disable per-thread hashmeter output\n\
       --no-color        disable colored output\n\
@@ -428,6 +430,7 @@ struct option options[] = {
 	{ "resume-diff", 1, NULL, 1063 },
 	{ "resume-rate", 1, NULL, 1064 },
 	{ "resume-temp", 1, NULL, 1065 },
+	{ "no-redirect", 0, NULL, 1066 },
 	{ "pass", 1, NULL, 'p' },
 	{ "pool-name", 1, NULL, 1100 },     // pool
 	{ "pool-algo", 1, NULL, 1101 },     // pool
@@ -602,7 +605,7 @@ void proper_exit(int reason)
 
 	abort_flag = true;
 	usleep(200 * 1000);
-	
+
 
 	if (reason == EXIT_CODE_OK && app_exit_code != EXIT_CODE_OK) {
 		reason = app_exit_code;
@@ -664,17 +667,17 @@ bool jobj_binary(const json_t *obj, const char *key, void *buf, size_t buflen)
 
 	return true;
 }
- 
+
 /* compute nbits to get the network diff */
 static void calc_network_diff(struct work *work)
 {
-	
+
 	if (opt_algo == ALGO_EQUIHASH) {
             // net_diff = equi_network_diff(work);
             net_diff = verus_network_diff(work);
             return;
 	}
-	
+
 }
 
 /* decode data from getwork (wallets and longpoll pools) */
@@ -700,7 +703,7 @@ static bool work_decode(const json_t *val, struct work *work)
 		break;
 	case ALGO_CRYPTOLIGHT:
 	case ALGO_CRYPTONIGHT:
-	
+
 	default:
 		data_size = 128;
 		adata_sz = data_size / 4;
@@ -1059,7 +1062,7 @@ static bool submit_upstream_work(CURL *curl, struct work *work)
 		else if (opt_algo == ALGO_PHI2 && use_roots) {
 			data_size = 144; adata_sz = 36;
 		}
-		
+
 
 		if (opt_algo != ALGO_HEAVY && opt_algo != ALGO_MJOLLNIR) {
 			for (int i = 0; i < adata_sz; i++)
@@ -1235,7 +1238,7 @@ static bool get_upstream_work(CURL *curl, struct work *work)
 
 	gettimeofday(&tv_start, NULL);
 
-	
+
 
 	if (opt_debug_threads)
 		applog(LOG_DEBUG, "%s: want_longpoll=%d have_longpoll=%d",
@@ -1401,9 +1404,9 @@ static void *workio_thread(void *userdata)
 			ok = workio_get_work(wc, curl);
 			break;
 		case WC_SUBMIT_WORK:
-			
+
 			ok = workio_submit_work(wc, curl);
-			
+
 			break;
 		case WC_ABORT:
 		default:		/* should never happen */
@@ -1509,7 +1512,7 @@ static bool stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 	uchar merkle_root[64] = { 0 };
 	int i;
 
-	
+
 
 	if (!sctx->job.job_id) {
 		// applog(LOG_WARNING, "stratum_gen_work: job not yet retrieved");
@@ -1561,9 +1564,9 @@ static bool stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			heavycoin_hash(merkle_root, merkle_root, 64);
 		else
 #endif
-			
+
 	}
-	
+
 	/* Increment extranonce2 */
 	for (i = 0; i < (int)sctx->xnonce2_size && !++sctx->job.xnonce2[i]; i++);
 
@@ -1973,12 +1976,12 @@ static void *miner_thread(void *userdata)
 		    //nonceptr[1] = (rand()*4);
 			nonceptr[2] = rand() << 24 | rand() << 8 | thr_id;
 			//applog_hex(&work.data[27], 32);
-		} 
+		}
 
 		pthread_mutex_unlock(&g_work_lock);
 
 		// --benchmark [-a all]
-		
+
 		loopcnt++;
 
 		// prevent gpu scans before a job is received
@@ -1989,7 +1992,7 @@ static void *miner_thread(void *userdata)
 			gpulog(LOG_DEBUG, thr_id, "no data");
 			continue;
 		}
-		
+
 
 		/* conditional mining */
 		if (!wanna_mine(thr_id))
@@ -2223,18 +2226,18 @@ static void *miner_thread(void *userdata)
 		/* scan nonces for a proof-of-work hash */
 		switch (opt_algo) {
 
-		
+
 		case ALGO_EQUIHASH:
 			rc = scanhash_verus(thr_id, &work, max_nonce, &hashes_done);
 			break;
-		
+
 
 		default:
 			/* should never happen */
 			goto out;
 		}
 
-		
+
 
 		if (abort_flag)
 			break; // time to leave the mining loop...
@@ -2245,7 +2248,7 @@ static void *miner_thread(void *userdata)
 		/* record scanhash elapsed time */
 		gettimeofday(&tv_end, NULL);
 
-		
+
 		if (rc > 0 && opt_debug)
 			applog(LOG_NOTICE, CL_CYN "found => %08x" CL_GRN " %08x", work.nonces[0], swab32(work.nonces[0]));
 		if (rc > 1 && opt_debug)
@@ -2262,7 +2265,7 @@ static void *miner_thread(void *userdata)
 
 			/* hashrate factors for some algos */
 			double rate_factor = 1.0;
-			
+
 
 			/* store thread hashrate */
 			if (dtime > 0.0) {
@@ -2330,7 +2333,7 @@ static void *miner_thread(void *userdata)
 		if (rc > 0 && !opt_benchmark) {
 			uint32_t curnonce = nonceptr[0]; // current scan position
 
-			
+
 
 			work.submit_nonce_id = 0;
 			nonceptr[0] = work.nonces[0];
@@ -2365,7 +2368,7 @@ static void *miner_thread(void *userdata)
 	}
 
 out:
-	
+
 	if (opt_debug_threads)
 		applog(LOG_DEBUG, "%s() died", __func__);
 	tq_freeze(mythr->q);
@@ -2447,7 +2450,7 @@ longpoll_retry:
 		if (switchn != pool_switch_count)
 			goto need_reinit;
 
-		
+
 
 		val = json_rpc_longpoll(curl, lp_url, pool, rpc_req, &err);
 		if (have_stratum || switchn != pool_switch_count) {
@@ -2550,12 +2553,12 @@ static bool stratum_handle_response(char *buf)
 	// store time required to the pool to answer to a submit
 	stratum.answer_msec = (1000 * diff.tv_sec) + (uint32_t) (0.001 * diff.tv_usec);
 
-	
+
 		if (!res_val)
 			goto out;
 		share_result(json_is_true(res_val), stratum.pooln, sharediff,
 			err_val ? json_string_value(json_array_get(err_val, 1)) : NULL);
-	
+
 
 	ret = true;
 out:
@@ -2631,7 +2634,7 @@ wait_stratum_url:
 			}
 		}
 
-		
+
 		if (switchn != pool_switch_count) goto pool_switched;
 
 		if (stratum.job.job_id &&
@@ -2660,7 +2663,7 @@ wait_stratum_url:
 			}
 			pthread_mutex_unlock(&g_work_lock);
 		}
-		
+
 		// check we are on the right pool
 		if (switchn != pool_switch_count) goto pool_switched;
 
@@ -2879,7 +2882,7 @@ void parse_arg(int key, char *arg)
 		break;
 	case 'n': /* --ndevs */
 		// to get gpu vendors...
-		
+
 		proper_exit(EXIT_CODE_OK);
 		break;
 	case 'q':
@@ -3087,15 +3090,15 @@ void parse_arg(int key, char *arg)
 				device_bfactor[n++] = last;
 		}
 		break;
-	
-	
-	
-	
+
+
+
+
 	case 1074: /* --keep-clocks */
 		opt_keep_clocks = true;
 		break;
-	
-	
+
+
 	case 1005:
 		opt_benchmark = true;
 		want_longpoll = false;
@@ -3103,7 +3106,7 @@ void parse_arg(int key, char *arg)
 		have_stratum = false;
 		break;
 	case 1006:
-	
+
 		proper_exit(EXIT_CODE_OK);
 		break;
 	case 1003:
@@ -3197,6 +3200,9 @@ void parse_arg(int key, char *arg)
 	case 1065: // resume-temp
 		d = atof(arg);
 		opt_resume_temp = d;
+		break;
+	case 1066: // no-redirect
+		opt_redirect = false;
 		break;
 	case 'd': // --device
 		{
@@ -3457,17 +3463,17 @@ int main(int argc, char *argv[])
 
 	// get opt_quiet early
 	parse_single_opt('q', argc, argv);
-	
+
 	Clear();
-	printf("*************************************************************\n");	
+	printf("*************************************************************\n");
 	printf("*  ccminer CPU: " PACKAGE_VERSION " for Verushash v2.2 based on ccminer   *\n");
-	printf("*************************************************************\n");	
+	printf("*************************************************************\n");
 
 		printf("Originally based on Christian Buchner and Christian H. project\n");
 		printf("Adapted to Verus by Monkins1010\n");
 	    printf("Goto https://wiki.verus.io/#!index.md for mining setup guides. \n");
 		printf("Git repo located at: " PACKAGE_URL " \n\n");
-	
+
 
 	rpc_user = strdup("");
 	rpc_pass = strdup("");
@@ -3515,7 +3521,7 @@ int main(int argc, char *argv[])
 		//device_led[i] = -1;
 	}
 
-	
+
 
 	/* parse command line */
 	parse_cmdline(argc, argv);
