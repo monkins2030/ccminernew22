@@ -534,30 +534,24 @@ static inline void drop_policy(void) {
 #endif
 }
 
-static void affine_to_cpu_mask(int id, unsigned long mask) {
+static void affine_to_cpu(int id) {
 	cpu_set_t set;
 	CPU_ZERO(&set);
-	for (uint8_t i = 0; i < num_cpus; i++) {
-		// cpu mask
-		if (mask & (1UL<<i)) { CPU_SET(i, &set); }
-	}
-	if (id == -1) {
-		// process affinity
-		sched_setaffinity(0, sizeof(&set), &set);
-	} else {
-		// thread only
+	CPU_SET(id, &set);
+	// thread only
+#if !(defined(__ANDROID__) || (__ANDROID_API__ > 23))
 		pthread_setaffinity_np(thr_info[id].pth, sizeof(&set), &set);
-	}
+#else
+		sched_setaffinity(0, sizeof(&set), &set);
+#endif
 }
 #elif defined(__FreeBSD__) /* FreeBSD specific policy and affinity management */
 #include <sys/cpuset.h>
 static inline void drop_policy(void) { }
-static void affine_to_cpu_mask(int id, unsigned long mask) {
+static void affine_to_cpu(int id) {
 	cpuset_t set;
 	CPU_ZERO(&set);
-	for (uint8_t i = 0; i < num_cpus; i++) {
-		if (mask & (1UL<<i)) CPU_SET(i, &set);
-	}
+	CPU_SET(id, &set);
 	cpuset_setaffinity(CPU_LEVEL_WHICH, CPU_WHICH_TID, -1, sizeof(cpuset_t), &set);
 }
 #elif defined(WIN32) /* Windows */
@@ -1839,19 +1833,9 @@ static void *miner_thread(void *userdata)
 	}
 
 	/* Cpu thread affinity */
-	/*if (num_cpus > 1) {
-		if (opt_affinity == -1L && opt_n_threads > 1) {
-			if (opt_debug)
-				applog(LOG_DEBUG, "Binding thread %d to cpu %d (mask %x)", thr_id,
-						thr_id % num_cpus, (1UL << (thr_id % num_cpus)));
-			affine_to_cpu_mask(thr_id, 1 << (thr_id % num_cpus));
-		} else if (opt_affinity != -1L) {
-			if (opt_debug)
-				applog(LOG_DEBUG, "Binding thread %d to cpu mask %lx", thr_id,
-						(long) opt_affinity);
-			affine_to_cpu_mask(thr_id, (unsigned long) opt_affinity);
-		}
-	}*/
+	if (num_cpus > 1) {
+		affine_to_cpu(thr_id);
+	}
 
 
 
@@ -3460,7 +3444,7 @@ int main(int argc, char *argv[])
 	
 	Clear();
 	printf("*************************************************************\n");	
-	printf("*  ccminer CPU: " PACKAGE_VERSION " for Verushash v2.2 based on ccminer   *\n");
+	printf("*  ccminer CPU: " PACKAGE_VERSION " for Verushash v2.2.2 based on ccminer *\n");
 	printf("*************************************************************\n");	
 
 		printf("Originally based on Christian Buchner and Christian H. project\n");

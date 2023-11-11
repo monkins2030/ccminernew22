@@ -14,7 +14,6 @@ rm -f Makefile.in
 rm -f config.status
 ./autogen.sh || echo done
 
-# CFLAGS="-O2" ./configure
 ./configure.sh
 
 make 
