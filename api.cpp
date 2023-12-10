@@ -332,7 +332,7 @@ static char *gethistory(char *params)
 	*buffer = '\0';
 	for (int i = 0; i < records; i++) {
 		time_t ts = data[i].tm_stat;
-		p += sprintf(p, "GPU=%d;H=%u;KHS=%.2f;DIFF=%g;"
+		p += sprintf(p, "CPU=%d;H=%u;KHS=%.2f;DIFF=%g;"
 				"COUNT=%u;FOUND=%u;ID=%u;TS=%u|",
 			0, data[i].height, data[i].globalhashcount * 1.0, data[i].difficulty,
 			data[i].hashcount, data[i].hashfound, data[i].uid, (uint32_t)ts);
