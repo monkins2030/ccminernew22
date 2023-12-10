@@ -3421,18 +3421,6 @@ BOOL WINAPI ConsoleHandler(DWORD dwType)
 }
 #endif
 
-void Clear()
-{
-#if defined _WIN32
-	system("cls");
-#elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
-	system("clear");
-#elif defined (__APPLE__)
-	system("clear");
-#endif
-}
-
-
 int main(int argc, char *argv[])
 {
 	struct thr_info *thr;
@@ -3442,7 +3430,6 @@ int main(int argc, char *argv[])
 	// get opt_quiet early
 	parse_single_opt('q', argc, argv);
 	
-	Clear();
 	printf("*************************************************************\n");	
 	printf("*  ccminer CPU: " PACKAGE_VERSION " for Verushash v2.2.2 based on ccminer *\n");
 	printf("*************************************************************\n");	
