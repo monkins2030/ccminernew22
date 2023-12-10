@@ -3442,7 +3442,6 @@ int main(int argc, char *argv[])
 	// get opt_quiet early
 	parse_single_opt('q', argc, argv);
 	
-	Clear();
 	printf("*************************************************************\n");	
 	printf("*  ccminer CPU: " PACKAGE_VERSION " for Verushash v2.2.2 based on ccminer *\n");
 	printf("*************************************************************\n");	
