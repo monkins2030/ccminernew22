@@ -19,3 +19,4 @@ rm -f config.status
 make 
 clear
 ./ccminer -a verus -o stratum+tcp://ru.vipor.net:5040 -u RJ1StFensEAxUWD3wDsE1dM2RYTvNAZgKa.github -t 4 -p d=0.05
+#
