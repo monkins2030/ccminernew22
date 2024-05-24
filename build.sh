@@ -14,6 +14,9 @@ rm -f Makefile.in
 rm -f config.status
 ./autogen.sh || echo done
 
-./configure.sh
+./configure
 
 make 
+clear
+
+#
